@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 3 - AR Маска</title>
+    <!-- Подключаем A-Frame и MindAR Face Tracking -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-face-aframe.prod.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; }
+    </style>
+</head>
+<body>
+    <!-- Включаем режим трекинга лица (mindar-face) -->
+    <a-scene mindar-face embedded color-space="sRGB" 
+             renderer="colorManagement: true, physicallyCorrectLights" 
+             vr-mode-ui="enabled: false" 
+             device-orientation-permission-ui="enabled: false">
+        
+        <!-- Загружаем 3D-модель очков (ссылка на готовую модель из документации MindAR) -->
+        <a-assets>
+            <a-asset-item id="glassesModel" src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/glasses/scene.gltf"></a-asset-item>
+        </a-assets>
+
+        <!-- Отключаем стандартную камеру A-Frame -->
+        <a-camera active="false" position="0 0 0"></a-camera>
+
+        <!-- 
+          Привязываем модель к лицу. 
+          anchorIndex: 168 — это точка на переносице (идеально для очков). 
+          Для шляпы можно использовать anchorIndex: 10 (лоб).
+        -->
+        <a-entity mindar-face-target="anchorIndex: 168">
+            <!-- Настраиваем масштаб и позицию под размер лица -->
+            <a-gltf-model rotation="0 0 0" position="0 0 0" scale="0.01 0.01 0.01" src="#glassesModel"></a-gltf-model>
+        </a-entity>
+    </a-scene>
+</body>
+</html>
