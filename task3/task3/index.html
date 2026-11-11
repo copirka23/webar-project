@@ -1,35 +1,61 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Задание 3 - AR Маска</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AR Face Tracking - Очки</title>
+
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-face-aframe.prod.js"></script>
+
     <style>
-        body { margin: 0; overflow: hidden; }
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
     </style>
 </head>
+
 <body>
-    <a-scene mindar-face embedded color-space="sRGB" 
-             renderer="colorManagement: true, physicallyCorrectLights" 
-             vr-mode-ui="enabled: false" 
-             device-orientation-permission-ui="enabled: false">
-        
-        <a-assets>
-            <!-- ИСПРАВЛЕННЫЙ ПУТЬ К МОДЕЛИ (официальный пример) -->
-            <a-asset-item id="glassesModel" 
-                src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/glasses/scene.gltf">
-            </a-asset-item>
-        </a-assets>
 
-        <a-camera active="false" position="0 0 0"></a-camera>
+<a-scene
+    mindar-face="autoStart: true"
+    embedded
+    color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
 
-        <!-- anchorIndex: 168 — переносица -->
-        <a-entity mindar-face-target="anchorIndex: 168">
-            <!-- Масштаб 0.01 — стандартный для этой модели, но если очки огромные, уменьши до 0.005 -->
-            <a-gltf-model rotation="0 0 0" position="0 0 0" scale="0.01 0.01 0.01" src="#glassesModel"></a-gltf-model>
-        </a-entity>
-    </a-scene>
+    <!-- Загрузка 3D-модели -->
+    <a-assets>
+        <a-asset-item
+            id="glasses"
+            src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/glasses/scene.gltf">
+        </a-asset-item>
+    </a-assets>
+
+    <!-- Камера MindAR -->
+    <a-camera
+        active="false"
+        position="0 0 0"
+        look-controls="enabled: false">
+    </a-camera>
+
+    <!-- Привязка очков к лицу -->
+    <a-entity mindar-face-target="anchorIndex: 168">
+
+        <a-gltf-model
+            src="#glasses"
+            position="0 0 0"
+            rotation="0 0 0"
+            scale="0.01 0.01 0.01">
+        </a-gltf-model>
+
+    </a-entity>
+
+</a-scene>
+
 </body>
 </html>
