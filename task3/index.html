@@ -2,82 +2,95 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AR Face Tracking - Очки</title>
+    <title>AR Очки</title>
 
-    <!-- A-Frame -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-
-    <!-- MindAR Face Tracking -->
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-face-aframe.prod.js"></script>
 
     <style>
         body {
             margin: 0;
             overflow: hidden;
+            background: black;
         }
 
-        .ar-info {
+        a-scene {
             position: fixed;
-            top: 15px;
+            width: 100%;
+            height: 100%;
+        }
+
+        #status {
+            position: fixed;
+            top: 20px;
             left: 0;
             width: 100%;
             text-align: center;
             color: white;
-            font-family: Arial, sans-serif;
-            font-size: 16px;
-            z-index: 10;
+            font: 16px Arial;
+            z-index: 100;
             pointer-events: none;
-            text-shadow: 1px 1px 3px black;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="ar-info">
-        Наведите камеру на лицо
-    </div>
+<div id="status">Загрузка AR...</div>
 
-    <a-scene
-        mindar-face="autoStart: true; uiLoading: no; uiError: no; uiScanning: no"
-        embedded
-        color-space="sRGB"
-        renderer="colorManagement: true, physicallyCorrectLights"
-        vr-mode-ui="enabled: false"
-        device-orientation-permission-ui="enabled: false">
+<a-scene
+    mindar-face="autoStart: true"
+    embedded
+    color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
 
-        <!-- 3D модель очков -->
-        <a-assets>
-            <a-asset-item
-                id="glasses"
-                src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/glasses/scene.gltf">
-            </a-asset-item>
-        </a-assets>
+    <a-assets>
+        <a-asset-item
+            id="glasses"
+            src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/glasses/scene.gltf">
+        </a-asset-item>
+    </a-assets>
 
-        <!-- Камера -->
-        <a-camera
-            active="false"
+    <a-camera
+        active="false"
+        position="0 0 0"
+        look-controls="enabled: false">
+    </a-camera>
+
+    <a-entity mindar-face-target="anchorIndex: 168">
+
+        <a-gltf-model
+            src="#glasses"
             position="0 0 0"
-            look-controls="enabled: false">
-        </a-camera>
+            rotation="0 0 0"
+            scale="0.01 0.01 0.01">
+        </a-gltf-model>
 
-        <!-- Отслеживание лица -->
-        <a-entity mindar-face-target="anchorIndex: 168">
+    </a-entity>
 
-            <!-- Очки -->
-            <a-gltf-model
-                src="#glasses"
-                position="0 0 0"
-                rotation="0 0 0"
-                scale="0.01 0.01 0.01">
-            </a-gltf-model>
+</a-scene>
 
-        </a-entity>
+<script>
+    const scene = document.querySelector('a-scene');
+    const status = document.querySelector('#status');
 
-    </a-scene>
+    scene.addEventListener('arReady', () => {
+        status.textContent = 'Наведите камеру на лицо';
+    });
+
+    scene.addEventListener('arError', (event) => {
+        status.textContent = 'Ошибка запуска камеры AR';
+        console.error(event);
+    });
+
+    scene.addEventListener('loaded', () => {
+        console.log('A-Frame загружен');
+    });
+</script>
 
 </body>
 </html>
